@@ -1,30 +1,15 @@
 # Naya Arcade
 
-Due giochi touch in italiano per bambini: Blocchi (blocchi in caduta) e Memory.
+Drei kinderfreundliche Spiele mit deutscher Oberfläche: Blöcke, Memory und **Meine Welt**, eine eigene 3D-Bauwelt. Läuft in Safari auf dem iPad mit Bildschirmsteuerung.
 
-- Da sola, contro un robot oppure con un amico sullo stesso dispositivo.
-- Facile, Media e Super. Partenza lenta e 6 coppie nel livello Facile.
-- Blocchi: due campi simultanei nelle sfide, durata 2 minuti, sequenza di pezzi condivisa. Vince il punteggio più alto; un campo pieno si ferma mentre l'altro continua. Le sfide finiscono prima se entrambi i campi sono pieni.
-- Memory: a turni; una coppia permette di giocare ancora. Il robot usa solo carte già scoperte, con memoria limitata a livello Facile e Media.
-- Record locali distinti per gioco, modalità e difficoltà. Il record è il punteggio di Naya, non del robot o dell'amico.
-- Musica originale e suoni sintetizzati con Web Audio. I pulsanti permettono di spegnerli separatamente. L'audio parte dopo un tocco, come richiesto da iPadOS.
-- Festeggiamenti per record, serie e traguardi. Rispetta la preferenza di movimento ridotto.
-- Pausa automatica quando si cambia scheda o si blocca lo schermo.
-- Nessun account, pubblicità, tracciamento o risorsa esterna.
-- Offline dopo il primo caricamento completo via HTTPS. I record non vengono sincronizzati tra dispositivi e possono essere rimossi cancellando i dati del browser.
+## Meine Welt
 
-## Pubblicare su GitHub Pages
+Wähle Haus oder Stall und tippe auf die Wiese. Möbel öffnen die Dachansicht und lassen sich innerhalb eines Gebäudes platzieren. Tiere bewegen sich, lassen sich füttern und suchen bei Hunger eine Futterstelle, wenn automatisches Füttern eingeschaltet ist. Lampen lassen sich antippen; Tag/Nacht und Musik sind umschaltbar. Objekte können verschoben, gedreht, gefärbt und entfernt werden; Rückgängig stellt die letzten Änderungen wieder her. Bis zu 100 Objekte pro Welt.
 
-Caricare questi file nella radice di un repository. In Settings → Pages selezionare Deploy from a branch, branch main, cartella /(root), e salvare. Il link è https://USERNAME.github.io/REPOSITORY/.
+Die Welt und Arcade-Rekorde werden lokal im Browser gespeichert. Sie synchronisieren sich nicht zwischen Geräten und können durch Löschen der Website-Daten verloren gehen. Die Dateien werden nach dem ersten Onlinebesuch für Offlinebetrieb zwischengespeichert.
 
-Su iPad: aprire il link in Safari, Condividi → Aggiungi alla schermata Home. Caricare il gioco una prima volta online prima di usarlo offline.
+## Entwicklung und Veröffentlichung
 
-## Comandi
+Statische Dateien ohne Buildschritt. Lokal z. B. mit einem HTTP-Server starten. GitHub Pages veröffentlicht den main-Zweig aus dem Stammverzeichnis. Änderungen an zwischengespeicherten Dateien erfordern eine neue Cache-Version in sw.js. Bestehende Speicherformate bei Erweiterungen erhalten oder migrieren.
 
-Usare i pulsanti sullo schermo. Blocchi supporta anche tastiera: frecce per Naya, spazio per caduta immediata; WASD e Q per l'amico.
-
-## Avvio locale
-
-Da questa cartella: `python3 -m http.server 8765`. Aprire http://localhost:8765. Nessun passaggio di build o dipendenza richiesti.
-
-Il gioco non utilizza marchi, loghi o risorse ufficiali Tetris.
+3D: Three.js 0.160.1, lokal mitgeliefert unter vendor; MIT-Lizenz in vendor/THREE-LICENSE.txt. Geometrien und Musik werden im Spiel erzeugt; keine externen Assetdienste und keine Konten erforderlich.
