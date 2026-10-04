@@ -28,3 +28,9 @@ Statische Dateien ohne Buildschritt. Lokal z. B. mit einem HTTP-Server starten. 
 Fourth game, German touch interface. Drag an item onto the character or tap it. Four outfits, four shoe styles, socks, hair colors, bracelets, lip colors, food and water. Original illustrated character with a 3D rendered appearance; not a rotatable 3D mesh. Quiet synthesized music, undo, automatic device-local save in `naya-atelier-v1`. Existing records and world saves remain separate. No accounts or remote save sync. Offline art is cached by service worker v5 after the first successful load.
 
 Validation: `node tests/atelier-rules.cjs`; browser checks for touch-style drag, outfit changes, care, reload persistence and portrait/landscape layout.
+
+
+### Room, kitten, adventures and album
+Atelier v7 adds a picture-led room with draggable bed/rug/lamp/plant, wall colors, removal and undo, light/night controls, a named kitten with pet/feed/play/sleep states, three repeatable three-step adventures, optional German speech via the device voice, and a local album of up to eight framed photos. New data uses `naya-atelier-life-v1` separately from all existing save keys. There are no daily deadlines or purchases. Invalid saved positions/names/photos are validated, furniture coordinates adapt to screen size, and no photo leaves the device. Removing furniture/photos can be undone during the current session.
+
+Run `node tests/atelier-life-rules.cjs`. Browser validation covers furniture drag/remove/undo, pet name and activities, adventure completion, album photos, reload persistence, and iPad portrait/landscape layout.
