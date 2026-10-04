@@ -22,3 +22,9 @@ Die Welt und Arcade-Rekorde werden lokal im Browser gespeichert. Sie synchronisi
 Statische Dateien ohne Buildschritt. Lokal z. B. mit einem HTTP-Server starten. GitHub Pages veröffentlicht den main-Zweig aus dem Stammverzeichnis. Änderungen an zwischengespeicherten Dateien erfordern eine neue Cache-Version in sw.js. Bestehende Speicherformate bei Erweiterungen erhalten oder migrieren.
 
 3D: Three.js 0.160.1, lokal mitgeliefert unter vendor; MIT-Lizenz in vendor/THREE-LICENSE.txt. Geometrien und Musik werden im Spiel erzeugt; keine externen Assetdienste und keine Konten erforderlich.
+
+
+## Nayas Atelier
+Fourth game, German touch interface. Drag an item onto the character or tap it. Four outfits, four shoe styles, socks, hair colors, bracelets, lip colors, food and water. Original illustrated character with a 3D rendered appearance; not a rotatable 3D mesh. Quiet synthesized music, undo, automatic device-local save in `naya-atelier-v1`. Existing records and world saves remain separate. No accounts or remote save sync. Offline art is cached by service worker v5 after the first successful load.
+
+Validation: `node tests/atelier-rules.cjs`; browser checks for touch-style drag, outfit changes, care, reload persistence and portrait/landscape layout.

@@ -4,9 +4,9 @@
   <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="theme-color" content="#191536"><meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <meta name="description" content="Drei Spiele für Naya: Blöcke, Memory und eine eigene 3D-Welt.">
+  <meta name="description" content="Vier Spiele für Naya: Blöcke, Memory, Meine Welt und Nayas Atelier.">
   <title>Naya Arcade</title><link rel="manifest" href="./manifest.webmanifest"><link rel="icon" href="./icon.svg" type="image/svg+xml"><link rel="apple-touch-icon" href="./icon-192.png">
-  <link rel="stylesheet" href="./style.css"><link rel="stylesheet" href="./world.css?v=4"><script defer src="./game.js?v=2"></script>
+  <link rel="stylesheet" href="./style.css"><link rel="stylesheet" href="./world.css?v=4"><link rel="stylesheet" href="./arcade-additions.css?v=5"><script defer src="./game.js?v=2"></script>
 </head>
 <body>
   <header class="topbar"><a class="brand" href="#" aria-label="Naya Arcade, Spiel auswählen"><span class="brand-mark">N</span><span>NAYA <b>ARCADE</b></span></a><div class="header-actions"><button id="music" class="small-button" aria-pressed="false">♫ Musik</button><button id="sound" class="small-button" aria-pressed="true">♪ Töne</button><button id="records-button" class="small-button">🏆 Rekorde</button></div></header>
@@ -17,8 +17,9 @@
         <button class="game-card blocks-card" data-game="blocks"><span class="card-label">STAPELN · DREHEN · GLÄNZEN</span><div class="block-preview" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div><span class="game-name">Blöcke</span><span class="game-description">Fülle eine Reihe und schaffe Platz!</span><span class="play-pill">Los geht’s <span>▶</span></span></button>
         <button class="game-card memory-card" data-game="memory"><span class="card-label">AUFDECKEN · MERKEN · FINDEN</span><div class="memory-preview" aria-hidden="true"><span>🍓</span><span>★</span><span>🍓</span></div><span class="game-name">Memory</span><span class="game-description">Finde alle versteckten Paare.</span><span class="play-pill">Los geht’s <span>▶</span></span></button>
         <a href="./world.html?v=4" class="game-card world-card"><span class="card-label">BAUEN · PFLEGEN · ENTDECKEN</span><div class="world-preview" aria-hidden="true">🌳 🏡 🐑</div><span class="game-name">Meine Welt</span><span class="game-description">Dein Haus. Deine Tiere. Dein Abenteuer.</span><span class="play-pill">Meine Welt öffnen <span>▶</span></span></a>
+        <a href="./atelier.html?v=5" class="game-card atelier-card"><span class="card-label">ANZIEHEN · PFLEGEN · VERZAUBERN</span><div class="atelier-preview" aria-hidden="true"></div><span class="game-name">Nayas Atelier</span><span class="game-description">Dein Stil. Deine Kleider. Deine Farben.</span><span class="play-pill">Atelier öffnen <span>▶</span></span></a>
       </div>
-      <p class="home-note">Blöcke und Memory: allein, mit dem Roboter oder mit einem Freund. Meine Welt: dein eigenes Abenteuer!</p>
+      <p class="home-note">Blöcke und Memory: allein, mit dem Roboter oder mit einem Freund. Meine Welt und Nayas Atelier: deine eigenen Abenteuer!</p>
     </section>
     <section id="setup" class="screen" hidden><button class="back-button" data-home>‹ Die Spiele</button><div class="setup-heading"><span id="setup-icon" class="setup-icon">▦</span><h1 id="setup-title">Blöcke</h1><p id="setup-description"></p></div>
       <fieldset><legend>Mit wem spielst du?</legend><div class="choice-grid" id="mode-choices"><button data-mode="solo" class="choice selected" aria-pressed="true"><span>⭐</span>Allein</button><button data-mode="ai" class="choice" aria-pressed="false"><span>🤖</span>Mit dem Roboter</button><button data-mode="friend" class="choice" aria-pressed="false"><span>🙌</span>Mit einem Freund</button></div></fieldset>
