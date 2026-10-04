@@ -27,9 +27,37 @@ function feet(c){const b=feetBounds[state.shoes];c.drawImage(images.feet,b.x,b.y
  // Outside the sock range, leave the original feet untouched.
  for(let y=0;y<1000;y++)for(let x=0;x<640;x++)if(y<720||y>=865||x<145||x>=435)p[(y*640+x)*4+3]=0;sc.putImageData(pixels,0,0);c.drawImage(segment,0,0);
 }
-function bracelet(c,value){if(value==='none')return;c.save();c.translate(363,540);c.rotate(.63);const colors=value==='pearls'?['#fff8e4']:value==='stars'?['#f4d282','#ffeeb3']:value==='rainbow'?['#b998df','#8fd0ce','#f0bd88','#eea8bd','#e9d888']:['#e7a9c3','#b4d9a3','#ffe4a8','#b9a4df','#96c9ce'];for(let i=0;i<11;i++){const a=i*Math.PI*2/11,x=Math.cos(a)*18,y=Math.sin(a)*7;const grad=c.createRadialGradient(x-1.6,y-2,1,x,y,4.4);grad.addColorStop(0,'#fffbea');grad.addColorStop(.35,colors[i%colors.length]);grad.addColorStop(1,colors[i%colors.length]);c.fillStyle=grad;c.strokeStyle='#aa8d7955';c.lineWidth=.6;c.beginPath();c.arc(x,y,4.4,0,Math.PI*2);c.fill();c.stroke();}if(value==='flowers'){c.translate(0,8);for(let i=0;i<5;i++){const a=i*1.256;c.fillStyle='#f3b4c8';c.beginPath();c.ellipse(Math.sin(a)*4,Math.cos(a)*4,3,4,-a,0,Math.PI*2);c.fill();}c.fillStyle='#fff0ad';c.beginPath();c.arc(0,0,2.6,0,Math.PI*2);c.fill();}c.restore();}
+// Anatomical landmarks are measured separately in each atlas pose, before scaling.
+const details=[
+ {wrist:[397,330],mouth:[0,0]},
+ {wrist:[922,329],mouth:[525,0]},
+ {wrist:[397,946],mouth:[1,620]},
+ {wrist:[924,947],mouth:[525,621]}
+];
+function point(x,y){const b=bounds[state.outfit],scale=940/b.h;return [320+(x-b.x-b.w/2)*scale,20+(y-b.y)*scale];}
+function bracelet(c,value){if(value==='none')return;const d=details[state.outfit],p=point(...d.wrist),scale=940/bounds[state.outfit].h;
+ c.save();c.translate(...p);c.rotate(-.66);c.scale(scale,scale);
+ const colors=value==='pearls'?['#fff8e4','#ead9c3']:value==='stars'?['#f4cb60','#ffe9a0']:value==='rainbow'?['#b998df','#8fd0ce','#f0bd88','#eea8bd','#e9d888']:['#e7a9c3','#b4d9a3','#ffe4a8','#b9a4df','#96c9ce'];
+ // Only the front half is visible: the rear half passes behind the wrist.
+ c.strokeStyle='#85614d55';c.lineWidth=2.8;c.beginPath();c.ellipse(0,.8,14,5.1,0,0,Math.PI);c.stroke();
+ for(let i=0;i<9;i++){const a=i*Math.PI/8,x=Math.cos(a)*14,y=Math.sin(a)*5.1;const grad=c.createRadialGradient(x-.8,y-1,0,x,y,2.8);grad.addColorStop(0,'#fffbea');grad.addColorStop(.4,colors[i%colors.length]);grad.addColorStop(1,colors[(i+1)%colors.length]);c.fillStyle=grad;c.strokeStyle='#87675366';c.lineWidth=.45;c.beginPath();c.arc(x,y,2.8,0,Math.PI*2);c.fill();c.stroke();}
+ if(value==='flowers'){c.translate(0,6);for(let i=0;i<5;i++){const a=i*1.256;c.fillStyle='#f3b4c8';c.beginPath();c.ellipse(Math.sin(a)*2.1,Math.cos(a)*2.1,1.7,2.2,-a,0,Math.PI*2);c.fill();}c.fillStyle='#fff0ad';c.beginPath();c.arc(0,0,1.5,0,Math.PI*2);c.fill();}
+ if(value==='stars'){c.translate(0,6);c.fillStyle='#ffe49a';c.strokeStyle='#bc923b';c.lineWidth=.4;c.beginPath();for(let i=0;i<10;i++){const a=i*Math.PI/5-Math.PI/2,r=i%2?1.8:3.8;c.lineTo(Math.cos(a)*r,Math.sin(a)*r);}c.closePath();c.fill();c.stroke();}c.restore();
+}
+function lipstick(c,value){if(value==='natural')return;
+ const shift=details[state.outfit].mouth,shape=[[378,161],[387,159],[395,155],[402,153],[409,150],[415,147],[412,153],[407,158],[400,163],[389,166],[382,164]];
+ const lipMask=document.createElement('canvas');lipMask.width=640;lipMask.height=1000;const lc=lipMask.getContext('2d');lc.fillStyle='white';lc.beginPath();shape.forEach(([x,y],i)=>{const p=point(x+shift[0],y+shift[1]);i?lc.lineTo(...p):lc.moveTo(...p);});lc.closePath();lc.fill();
+ const mask=lc.getImageData(0,0,640,1000).data,pixels=c.getImageData(0,0,640,1000),p=pixels.data;
+ const tone={rose:[232,90,137],peach:[235,135,96],berry:[161,53,118]}[value];
+ for(let i=0;i<p.length;i+=4){if(!mask[i+3])continue;const r=p[i],g=p[i+1],b=p[i+2];
+ // Recolor the existing lip pigment, keeping surrounding skin and the smile crease.
+ if(b<g*.79||r<g*1.25||g<52)continue;
+ const light=Math.max(.5,Math.min(1.32,(r*.3+g*.59+b*.11)/141)),alpha=mask[i+3]/255*.92;
+ for(let k=0;k<3;k++)p[i+k]=Math.round(p[i+k]*(1-alpha)+Math.min(255,tone[k]*light)*alpha);
+ }c.putImageData(pixels,0,0);
+}
 function renderDoll(){if(!ready)return;ctx.clearRect(0,0,640,1000);const replaceFeet=state.shoes!==0||state.socks!=='mint';if(replaceFeet){ctx.save();ctx.beginPath();ctx.rect(0,760,640,240);ctx.clip();feet(ctx);ctx.restore();}ctx.save();if(replaceFeet){ctx.beginPath();ctx.rect(0,0,640,760);ctx.clip();}base(ctx,state.outfit);ctx.restore();recolorHair(ctx,state.hair);bracelet(ctx,state.bracelet);
- if(state.lip!=='natural'){const tones={rose:'#c7758c',peach:'#c78674',berry:'#a75e84'};ctx.save();ctx.globalAlpha=.5;ctx.strokeStyle=tones[state.lip];ctx.lineWidth=4.2;ctx.lineCap='round';ctx.beginPath();ctx.moveTo(313,239);ctx.quadraticCurveTo(336,247,356,229);ctx.stroke();ctx.restore();}
+ lipstick(ctx,state.lip);
  $('doll').setAttribute('aria-label',`Dein Charakter: ${DB.clothes.find(a=>a.kind==='outfit'&&a.value===state.outfit).name}`);
 }
 const thumbs=new Map();
