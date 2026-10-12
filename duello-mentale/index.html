@@ -96,7 +96,7 @@ var last=round===totalRounds-1;$('round-chip').textContent=(last?'⚡ FINALE ×2
 }
 function start(){
 names=[cleanName($('name1').value,'Giocatore 1'),cleanName($('name2').value,'Giocatore 2')];
-scores=[0,0];streak=[0,0];totalRounds=chosenRounds;round=0;first=rand(2);owner=first;active=owner;steal=false;used={seq:[],logic:[]};newPuzzle();showPass(owner,false);
+scores=[0,0];streak=[0,0];totalRounds=chosenRounds;round=0;first=rand(2);owner=first;active=owner;steal=false;used={seq:[],logic:[]};newPuzzle();beginChallenge();
 }
 function pickUnused(type,bank){
 var available=bank.map(function(_,i){return i;}).filter(function(i){return used[type].indexOf(i)<0;});
@@ -201,7 +201,7 @@ $('taunt').textContent=taunts[rand(taunts.length)];sound(win<0?340:900);
 }
 function resetHome(){clearInterval(timer);show('home');}
 document.querySelector('.round-picks').addEventListener('click',function(e){var b=e.target.closest('button[data-rounds]');if(!b)return;chosenRounds=Number(b.dataset.rounds);document.querySelectorAll('.round-picks button').forEach(function(x){var selected=x===b;x.classList.toggle('selected',selected);x.setAttribute('aria-pressed',selected?'true':'false');});$('round-feedback').textContent=chosenRounds+' round selezionati · durata scelta (Runden ausgewählt · Dauer gewählt)';$('start').innerHTML='INIZIA IL DUELLO · '+chosenRounds+' ROUND <span aria-hidden="true">↗</span>';});
-$('start').addEventListener('click',start);$('pass-go').addEventListener('click',beginChallenge);$('next').addEventListener('click',nextRound);$('rematch').addEventListener('click',start);$('home').addEventListener('click',resetHome);
+$('start').onclick=start;$('pass-go').addEventListener('click',beginChallenge);$('next').addEventListener('click',nextRound);$('rematch').addEventListener('click',start);$('home').addEventListener('click',resetHome);
 $('sound').addEventListener('click',function(){soundOn=!soundOn;$('sound').textContent=soundOn?'♫ Audio: sì':'♫ Audio: no';if(soundOn)sound(520);});
 document.addEventListener('visibilitychange',function(){if(document.hidden){clearInterval(timer);}});
 })();
