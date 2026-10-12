@@ -4,6 +4,7 @@ assert.equal(cards.length,78);
 assert.equal(cards.filter(c=>!c.hot).length,42);
 assert.equal(cards.filter(c=>c.hot).length,36);
 for(const card of cards.filter(c=>c.hot))assert.deepEqual(card.choices.map(c=>c.heat),[1,2,3],card.id);
+for(const card of cards.filter(c=>c.hot))assert.deepEqual(card.choices.map(c=>c.heat),[1,2,3],card.id);
 assert.equal(new Set(cards.map(c=>c.id)).size,cards.length);
 assert.equal(new Set(cards.map(c=>c.prompt.it)).size,cards.length);
 for(const card of cards){
