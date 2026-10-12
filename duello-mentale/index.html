@@ -194,7 +194,7 @@ function finish(){
 show('finish');var a=scores[0],b=scores[1],win=a===b?-1:(a>b?0:1);
 $('finish-title').textContent=win<0?'PARITÀ. VI ODIATE UGUALE.':names[win]+' HA DISTRUTTO '+names[1-win]+'.';
 $('podium').replaceChildren();
-for(var i=0;i<2;i++){var card=document.createElement('div');card.className='podium-card'+(i===win?' winner':'');var name=document.createElement('div');name.textContent=names[i];var val=document.createElement('strong');val.textContent=scores[i];var meta=document.createElement('small');meta.textContent='punti · serie migliore '+streak[i];card.append(name,val,meta);$('podium').append(card);}
+for(var i=0;i<2;i++){var card=document.createElement('div');card.className='podium-card'+(i===win?' winner':'');var name=document.createElement('div');name.textContent=names[i];var val=document.createElement('strong');val.textContent=scores[i];var meta=document.createElement('small');meta.textContent='punti · serie attuale '+streak[i];card.append(name,val,meta);$('podium').append(card);}
 var taunts=win<0?['Pareggio: rivincita obbligatoria.','Due cervelli, zero superiorità.']:['La rivincita non cancella questa umiliazione.','L’altro ha appena prenotato il diritto di vantarsi.','Puoi dare la colpa all’iPad, ma non regge.','Campione del divano, sconfitto del duello.'];
 $('taunt').textContent=taunts[rand(taunts.length)];sound(win<0?340:900);
 }
