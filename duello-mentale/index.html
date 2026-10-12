@@ -1,0 +1,209 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#10121b">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="description" content="Neuroduello: un gioco di logica, memoria e sfida per due sullo stesso iPad.">
+<title>Neuroduello — testa a testa</title>
+<style>
+:root{color-scheme:dark;--bg:#10121b;--panel:#191d2a;--panel2:#202638;--ink:#f5f4ee;--muted:#a4aac0;--cyan:#71e6db;--pink:#ff7ab6;--gold:#ffd36d;--line:#ffffff1b;--font:ui-rounded,"SF Pro Rounded",system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+*{box-sizing:border-box}html{min-height:100%;background:var(--bg)}body{margin:0;min-height:100svh;background:radial-gradient(ellipse at 50% -15%,#424568 0%,transparent 46%),radial-gradient(ellipse at 100% 80%,#30213f 0%,transparent 38%),var(--bg);font-family:var(--font);color:var(--ink);-webkit-tap-highlight-color:transparent}button,input{font:inherit}button{color:inherit;touch-action:manipulation;cursor:pointer}button:focus-visible,input:focus-visible{outline:3px solid var(--gold);outline-offset:3px}[hidden]{display:none!important}
+.top{max-width:1060px;margin:auto;padding:16px 22px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--line)}.brand{display:flex;align-items:center;gap:10px;font-size:13px;font-weight:900;letter-spacing:.17em}.brand svg{width:36px;height:36px}.brand small{display:block;color:var(--muted);font-size:10px;letter-spacing:.12em}.sound{border:1px solid var(--line);background:#ffffff0b;border-radius:999px;padding:9px 13px;color:var(--muted);font-size:12px}
+main{max-width:1000px;margin:auto;padding:22px 22px calc(35px + env(safe-area-inset-bottom));min-height:calc(100svh - 80px)}.view{animation:enter .24s ease both}.hero{display:grid;grid-template-columns:1fr 1fr;align-items:center;gap:34px;padding:20px 0 25px}.art{width:min(100%,430px);aspect-ratio:1;justify-self:center;filter:drop-shadow(0 20px 45px #03040c99)}.eyebrow{color:var(--cyan);font-size:11px;font-weight:900;letter-spacing:.23em;text-transform:uppercase}.hero h1{font-size:clamp(46px,7vw,82px);line-height:.91;letter-spacing:-.08em;margin:14px 0}.hero h1 span{display:block;color:var(--pink)}.lead{font-size:17px;line-height:1.55;color:#d9d9e2;max-width:420px}.lead b{color:var(--gold)}.setup{max-width:780px;margin:0 auto;padding:21px;border:1px solid #ffffff24;border-radius:22px;background:linear-gradient(135deg,#ffffff0e,#ffffff05);box-shadow:0 20px 55px #0003}.setup-title{display:flex;justify-content:space-between;align-items:end;gap:12px;margin-bottom:14px}.setup-title strong{font-size:17px}.setup-title small{color:var(--muted)}.names{display:grid;grid-template-columns:1fr 1fr;gap:12px}.names label{font-size:12px;color:var(--muted);font-weight:700}.names input{margin-top:7px;display:block;width:100%;background:#0e111b;border:1px solid #ffffff23;border-radius:12px;padding:14px;color:var(--ink);font-size:17px}.round-picks{display:flex;gap:8px;margin:17px 0 15px}.round-picks button{flex:1;min-height:43px;border:1px solid var(--line);border-radius:11px;background:#ffffff08;color:var(--muted);font-weight:800}.round-picks button.selected{color:var(--bg);background:var(--cyan);border-color:var(--cyan)}.primary{min-height:54px;border:0;border-radius:13px;padding:13px 20px;background:linear-gradient(100deg,var(--cyan),#a1eed1);color:#111923;font-size:16px;font-weight:950;box-shadow:0 5px 0 #3d9b96}.primary:active{transform:translateY(3px);box-shadow:0 2px 0 #3d9b96}.start{width:100%;font-size:17px}.fine{font-size:11px;color:#868da4;text-align:center;margin:13px 0 0}.how{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:15px auto 0;max-width:780px}.how div{border:1px solid var(--line);border-radius:14px;padding:12px;background:#ffffff06}.how b{display:block;color:var(--gold);font-size:12px;margin-bottom:4px}.how span{font-size:12px;color:var(--muted);line-height:1.4}
+.pass{max-width:640px;margin:9vh auto;text-align:center;padding:18px}.pass-orb{width:126px;height:126px;margin:0 auto 23px;display:grid;place-items:center;border-radius:50%;background:radial-gradient(circle at 35% 30%,#f5edc9,#ff7ab6 35%,#7c6cf2 68%,#161a28 70%);box-shadow:0 0 55px #ff7ab64d,inset -18px -15px 30px #242047;font-size:48px;font-weight:950;color:#171928;animation:float 2s ease-in-out infinite}.pass h2{font-size:clamp(30px,6vw,54px);line-height:1.02;letter-spacing:-.05em;margin:9px 0}.pass p{color:var(--muted);line-height:1.5}.pass .primary{margin-top:15px;min-width:min(100%,290px)}
+.hud{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:12px;margin:0 auto 13px;max-width:840px}.player{padding:10px 12px;border:1px solid var(--line);border-radius:14px;background:#ffffff07;min-width:0}.player.active{border-color:var(--cyan);box-shadow:0 0 0 1px #71e6db44,inset 0 0 24px #71e6db0b}.player:last-child.active{border-color:var(--pink);box-shadow:0 0 0 1px #ff7ab644,inset 0 0 24px #ff7ab60b}.player-name{font-weight:850;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.score-line{display:flex;justify-content:space-between;align-items:baseline;margin-top:2px;color:var(--muted);font-size:11px}.score-line strong{font-size:19px;color:var(--ink)}.round-chip{border:1px solid #ffd36d55;background:#ffd36d12;color:var(--gold);border-radius:999px;padding:8px 11px;text-align:center;white-space:nowrap;font-size:12px;font-weight:900}.meter{max-width:840px;height:5px;border-radius:9px;background:#ffffff17;margin:0 auto 14px;overflow:hidden}.meter span{display:block;height:100%;width:100%;transform-origin:left;background:linear-gradient(90deg,var(--cyan),var(--pink));transition:transform .3s linear}.challenge{max-width:840px;margin:auto;border:1px solid #ffffff24;border-radius:21px;background:linear-gradient(145deg,#1d2232,#161a26);padding:clamp(17px,3vw,27px);box-shadow:0 18px 45px #0004}.challenge-top{display:flex;justify-content:space-between;align-items:center;gap:12px}.type-tag{color:var(--cyan);font-size:11px;letter-spacing:.17em;font-weight:950}.clock{font-variant-numeric:tabular-nums;color:var(--gold);font-size:15px;font-weight:900}.prompt{font-size:clamp(21px,3.4vw,32px);line-height:1.2;letter-spacing:-.03em;margin:14px 0 17px;min-height:2.3em}.display{min-height:86px;display:flex;justify-content:center;align-items:center;gap:clamp(5px,2vw,18px);flex-wrap:wrap;margin:0 auto 15px}.seq{display:flex;align-items:center;justify-content:center;gap:clamp(4px,1.8vw,14px);flex-wrap:wrap}.seq span{min-width:clamp(38px,7vw,62px);height:clamp(42px,8vw,64px);display:grid;place-items:center;border-radius:13px;background:#ffffff0b;border:1px solid #ffffff18;font-size:clamp(19px,3vw,28px);font-weight:900}.seq .unknown{color:var(--pink);border-style:dashed}.options{display:grid;grid-template-columns:1fr 1fr;gap:10px}.option{min-height:58px;padding:11px 14px;border-radius:13px;border:1px solid #ffffff22;background:#ffffff08;text-align:left;font-size:16px;font-weight:780;line-height:1.25;transition:transform .12s,border-color .12s,background .12s}.option:active{transform:scale(.98)}.option:hover{border-color:#71e6db99;background:#71e6db0c}.option:disabled{cursor:default;opacity:.65}.option .letter{display:inline-grid;place-items:center;width:26px;height:26px;margin-right:9px;border-radius:8px;background:#ffffff12;color:var(--cyan);font-size:12px}.option.glyph-choice,.option.memory-choice{text-align:center;display:grid;justify-items:center;gap:6px}.glyph-choice svg{width:74px;height:74px}.glyph-choice .letter{margin:0}.memory-choice .letter{margin:0}.mini-grid{display:grid;grid-template-columns:repeat(4,12px);gap:3px;padding:5px;border-radius:8px;background:#0e111b}.mini-grid i{display:block;width:12px;height:12px;border-radius:3px;background:#ffffff15}.mini-grid i.on{background:var(--pink);box-shadow:0 0 8px #ff7ab6aa}.memory-board{display:grid;grid-template-columns:repeat(4,clamp(43px,7vw,62px));gap:8px}.memory-board i{height:clamp(43px,7vw,62px);display:block;border-radius:12px;background:#ffffff0c;border:1px solid #ffffff18;transition:background .15s}.memory-board i.on{background:linear-gradient(145deg,var(--pink),#9468ff);box-shadow:0 0 24px #ff7ab688;transform:scale(.96)}.instruction{text-align:center;color:var(--muted);font-size:12px;min-height:20px;margin:10px 0 0}.result{max-width:680px;margin:8vh auto;text-align:center;padding:20px}.result-mark{width:90px;height:90px;margin:auto;display:grid;place-items:center;border-radius:28px;background:linear-gradient(145deg,var(--gold),var(--pink));color:#21162b;font-size:40px;font-weight:1000;transform:rotate(-5deg);box-shadow:0 15px 40px #ff7ab633}.result h2{font-size:clamp(32px,6vw,56px);line-height:1;letter-spacing:-.05em;margin:25px 0 7px}.result p{color:var(--muted);line-height:1.5}.gain{font-size:clamp(44px,9vw,75px);font-weight:1000;color:var(--gold);letter-spacing:-.06em;margin:10px}.result .primary{margin-top:13px}.finish{max-width:740px;margin:3vh auto;text-align:center}.finish h1{font-size:clamp(38px,7vw,70px);line-height:.98;letter-spacing:-.06em;margin:15px 0}.podium{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:24px 0}.podium-card{border:1px solid var(--line);border-radius:18px;padding:18px;background:#ffffff08}.podium-card.winner{border-color:var(--gold);background:linear-gradient(145deg,#ffd36d1c,#ff7ab60a);box-shadow:0 0 30px #ffd36d13}.podium-card small{color:var(--muted)}.podium-card strong{display:block;font-size:clamp(37px,7vw,60px);color:var(--cyan);margin:4px}.podium-card.winner strong{color:var(--gold)}.taunt{min-height:50px;color:var(--pink);font-size:18px;font-weight:850}.privacy{font-size:11px;color:#7e859b;margin:16px auto;max-width:560px}.buttons{display:flex;justify-content:center;gap:10px;flex-wrap:wrap}.secondary{min-height:48px;padding:11px 16px;border:1px solid var(--line);border-radius:12px;background:#ffffff08;font-weight:800}
+@keyframes enter{from{opacity:0;transform:translateY(7px)}to{opacity:1;transform:none}}@keyframes float{50%{transform:translateY(-8px) rotate(4deg)}}@media(max-width:650px){.top{padding:12px 15px}main{padding:14px 14px calc(25px + env(safe-area-inset-bottom))}.hero{grid-template-columns:1fr;gap:6px;padding:4px 0 15px}.art{width:min(60vw,250px)}.hero-copy{text-align:center}.hero h1{font-size:52px;margin:8px 0}.lead{margin:10px auto;font-size:15px}.setup{padding:16px}.how{grid-template-columns:1fr}.how div{display:flex;gap:8px;align-items:baseline}.hud{gap:6px}.player{padding:8px}.player-name{font-size:13px}.score-line{font-size:10px}.score-line strong{font-size:16px}.round-chip{padding:7px 8px;font-size:10px}.challenge{padding:16px 13px}.prompt{font-size:22px;min-height:unset}.options{gap:7px}.option{min-height:64px;padding:9px;font-size:14px}.option .letter{width:23px;height:23px;margin-right:5px}.pass{margin:5vh auto}.result{margin:4vh auto}.podium{gap:8px}.podium-card{padding:14px 8px}}@media(orientation:landscape) and (max-height:600px){.top{padding-block:8px}main{padding-top:8px}.hero{grid-template-columns:.7fr 1fr;padding:0;gap:12px}.art{width:min(32vh,200px)}.hero h1{font-size:45px}.lead{font-size:13px}.setup{padding:12px}.pass{margin:2vh auto}.pass-orb{width:75px;height:75px;font-size:30px;margin-bottom:10px}.result{margin:2vh auto}.result-mark{width:62px;height:62px}.result h2{margin:12px 0}.challenge{padding:12px 16px}.prompt{font-size:21px;margin:7px 0}.display{min-height:55px;margin-bottom:8px}.memory-board{grid-template-columns:repeat(4,39px);gap:5px}.memory-board i{height:39px}}@media(prefers-reduced-motion:reduce){*,*:before,*:after{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<header class="top"><div class="brand"><svg viewBox="0 0 40 40" aria-hidden="true"><path d="M20 3 35 12v16L20 37 5 28V12z" fill="none" stroke="#71e6db" stroke-width="2"/><path d="M12 25 18 14l4 12 6-13" fill="none" stroke="#ff7ab6" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/><circle cx="20" cy="20" r="3" fill="#ffd36d"/></svg><span>NEURODUELLO<small>TESTA A TESTA · SAME IPAD</small></span></div><button id="sound" class="sound" type="button">♫ Audio: sì</button></header>
+<main>
+<section id="home" class="view">
+<div class="hero">
+<svg class="art" viewBox="0 0 440 440" role="img" aria-label="Illustrazione originale di due cervelli astratti che si sfidano">
+<defs><radialGradient id="core"><stop stop-color="#fff5c7"/><stop offset=".28" stop-color="#ff7ab6"/><stop offset=".68" stop-color="#8b70ff"/><stop offset="1" stop-color="#27264c"/></radialGradient><linearGradient id="ring" x1="0" x2="1" y1="0" y2="1"><stop stop-color="#71e6db"/><stop offset=".52" stop-color="#776ef3"/><stop offset="1" stop-color="#ff7ab6"/></linearGradient><filter id="glow"><feGaussianBlur stdDeviation="5" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs>
+<circle cx="220" cy="220" r="180" fill="none" stroke="#ffffff12" stroke-width="1"/><circle cx="220" cy="220" r="151" fill="none" stroke="url(#ring)" stroke-width="2" stroke-dasharray="5 9" opacity=".85"/><ellipse cx="220" cy="220" rx="115" ry="154" fill="none" stroke="#71e6db55" stroke-width="2" transform="rotate(50 220 220)"/><ellipse cx="220" cy="220" rx="115" ry="154" fill="none" stroke="#ff7ab655" stroke-width="2" transform="rotate(-50 220 220)"/><path d="M220 93c-44-53-117-8-92 47-53 10-54 83-9 99-24 43 10 82 52 75 7 48 62 56 83 21 24 34 79 26 84-22 47 7 75-37 51-77 45-23 34-90-12-98 20-50-45-99-91-45-17-24-50-24-66 0Z" fill="url(#core)" stroke="#fff5d5" stroke-width="2.4" filter="url(#glow)"/><path d="M218 97c-15 22-18 44-2 63 15 18 14 38-4 56-20 20-17 42 0 61 16 18 15 38-2 57m15-237c14 18 14 37 0 54-16 20-14 40 3 57 19 18 20 41 3 59-17 19-15 37 1 55" fill="none" stroke="#241e49" stroke-width="7" stroke-linecap="round"/><path d="M133 177c20-10 38-9 54 5m-64 61c20-14 43-14 63-1m111-60c20-14 40-12 57 1m-57 69c20 10 42 7 61-8M167 132c4 17 14 28 30 32m-9 135c-16 5-26 16-30 33m119-203c-2 16-12 28-28 34m38 140c16 3 27 14 33 31" fill="none" stroke="#fff3d8" stroke-width="4" stroke-linecap="round" opacity=".85"/><circle cx="117" cy="134" r="7" fill="#71e6db"/><circle cx="332" cy="127" r="6" fill="#ffd36d"/><circle cx="347" cy="293" r="8" fill="#ff7ab6"/><circle cx="107" cy="300" r="5" fill="#ffd36d"/><path d="m82 214 13-7 13 7v15l-13 8-13-8zm258-10 13-8 13 8v15l-13 8-13-8z" fill="none" stroke="#ffffff90" stroke-width="2"/><text x="220" y="408" text-anchor="middle" fill="#a4aac0" font-size="10" letter-spacing="4">PENSA. RISCHIA. RUBA LA VITTORIA.</text>
+</svg>
+<div class="hero-copy"><div class="eyebrow">UNA PARTITA · DUE CERVELLI</div><h1>Neuro<span>duello.</span></h1><p class="lead">Logica, memoria e sangue freddo. <b>Un iPad, due rivali, una vittoria.</b> Sbaglia? L'altro può rubarti i punti. L'ultimo round vale doppio.</p></div>
+</div>
+<div class="setup">
+<div class="setup-title"><strong>Scegliete i duellanti</strong><small>Pick your fighters</small></div>
+<div class="names"><label>GIOCATORE 1<input id="name1" maxlength="18" autocomplete="off" placeholder="Es. Giacomo"></label><label>GIOCATORE 2<input id="name2" maxlength="18" autocomplete="off" placeholder="Es. La tua ragazza"></label></div>
+<div class="setup-title" style="margin:16px 0 0"><strong>Durata del duello</strong><small>La finale è sempre doppia</small></div>
+<div class="round-picks"><button type="button" data-rounds="8">8 ROUND</button><button type="button" data-rounds="12" class="selected">12 ROUND</button><button type="button" data-rounds="16">16 ROUND</button></div>
+<button id="start" class="primary start" type="button">INIZIA IL DUELLO <span aria-hidden="true">↗</span></button>
+<p class="fine">Solo sul dispositivo · nessun account · i punteggi non escono dall'iPad.</p></div>
+<div class="how"><div><b>01 · OCCHIO</b><span>Risolvi sequenze, logica, glifi e prove di memoria.</span></div><div><b>02 · TEMPO</b><span>Più sei rapido, più punti fai. Le serie giuste moltiplicano il bottino.</span></div><div><b>03 · FURTO</b><span>Se sbagli, passa l'iPad: l'altro può soffiarti punti preziosi.</span></div></div>
+</section>
+<section id="pass" class="view pass" hidden><div class="pass-orb" aria-hidden="true">↯</div><div class="eyebrow" id="pass-kicker">CAMBIO DUELLANTE</div><h2 id="pass-title">Passa l'iPad</h2><p id="pass-copy"></p><button id="pass-go" class="primary" type="button">SONO PRONTO/A ↗</button></section>
+<section id="arena" class="view" hidden>
+<div class="hud"><div id="p1" class="player"><div id="p1name" class="player-name">Giocatore 1</div><div class="score-line"><span id="p1meta">Serie 0</span><strong id="p1score">0</strong></div></div><div id="round-chip" class="round-chip">ROUND 1 / 12</div><div id="p2" class="player"><div id="p2name" class="player-name">Giocatore 2</div><div class="score-line"><span id="p2meta">Serie 0</span><strong id="p2score">0</strong></div></div></div>
+<div class="meter"><span id="meter-fill"></span></div><article class="challenge"><div class="challenge-top"><span id="type-tag" class="type-tag">SEQUENZA</span><span id="clock" class="clock">18.0</span></div><h2 id="prompt" class="prompt"></h2><div id="display" class="display"></div><div id="options" class="options"></div><p id="instruction" class="instruction"></p></article>
+</section>
+<section id="result" class="view result" hidden><div id="result-mark" class="result-mark">✓</div><div id="result-kicker" class="eyebrow">RISPOSTA GIUSTA</div><h2 id="result-title"></h2><div id="gain" class="gain">+120</div><p id="result-copy"></p><button id="next" class="primary" type="button">PROSSIMO ROUND ↗</button></section>
+<section id="finish" class="view finish" hidden><div class="eyebrow">DUELLO CONCLUSO</div><h1 id="finish-title"></h1><div id="podium" class="podium"></div><p id="taunt" class="taunt"></p><p class="privacy">Rivincita? Nessun punteggio è stato salvato: la prossima partita riparte da zero.</p><div class="buttons"><button id="rematch" class="primary" type="button">RIVINCITA IMMEDIATA ↗</button><button id="home" class="secondary" type="button">CAMBIA GIOCATORI</button></div></section>
+</main>
+<script>
+(function(){
+'use strict';
+var $=function(id){return document.getElementById(id);};
+var views=['home','pass','arena','result','finish'];
+var names=['Giocatore 1','Giocatore 2'],scores=[0,0],streak=[0,0],first=0,owner=0,active=0,round=0,totalRounds=12,steal=false,current=null,seconds=18,timer=null,used={seq:[],logic:[]},soundOn=true,audio=null,chosenRounds=12;
+var labels={seq:'SEQUENZA',logic:'DEDUZIONE',visual:'GLIFO INTRUSO',memory:'MEMORIA'};
+var seqBank=[
+{q:'3 · 6 · 12 · 24 · ?',a:['36','42','48','54'],c:2},
+{q:'2 · 5 · 10 · 17 · 26 · ?',a:['35','36','37','39'],c:2},
+{q:'1 · 1 · 2 · 3 · 5 · ?',a:['7','8','9','10'],c:1},
+{q:'4 · 9 · 19 · 39 · ?',a:['69','77','79','81'],c:2},
+{q:'100 · 50 · 25 · ?',a:['10','12,5','15','20'],c:1},
+{q:'1 · 4 · 9 · 16 · ?',a:['20','24','25','36'],c:2},
+{q:'2 · 3 · 5 · 8 · 12 · ?',a:['15','16','17','18'],c:2},
+{q:'81 · 27 · 9 · ?',a:['1','2','3','6'],c:2},
+{q:'7 · 10 · 16 · 28 · ?',a:['40','48','52','56'],c:2},
+{q:'5 · 11 · 23 · 47 · ?',a:['89','93','95','97'],c:2},
+{q:'1 · 2 · 6 · 24 · 120 · ?',a:['240','360','600','720'],c:3},
+{q:'14 · 13 · 11 · 8 · 4 · ?',a:['0','-1','-2','-3'],c:1}
+];
+var logicBank=[
+{q:'In una gara superi chi è al secondo posto. In che posizione sei?',a:['Primo','Secondo','Terzo','Dipende dal numero dei concorrenti'],c:1},
+{q:'5 macchine producono 5 pezzi in 5 minuti. Quanto impiegano 100 macchine per 100 pezzi?',a:['5 minuti','20 minuti','100 minuti','500 minuti'],c:0},
+{q:'Una ninfea raddoppia ogni giorno. Lo stagno è pieno al giorno 48. Quando era mezzo pieno?',a:['Giorno 24','Giorno 47','Giorno 46','Non si può sapere'],c:1},
+{q:'Racchetta e pallina costano 1,10 CHF. La racchetta costa 1 CHF più della pallina. Quanto costa la pallina?',a:['0,05 CHF','0,10 CHF','0,15 CHF','0,20 CHF'],c:0},
+{q:'Due padri e due figli prendono tre biglietti del cinema e ognuno ne ha uno. Com’è possibile?',a:['Uno entra gratis','Sono nonno, padre e figlio','Uno dei biglietti è doppio','Non è possibile'],c:1},
+{q:'Un orologio batte sei rintocchi in cinque secondi. In quanto batte dodici rintocchi?',a:['11 secondi','12 secondi','10 secondi','Doppio, cioè 10 secondi'],c:0},
+{q:'Una stanza ha quattro angoli. In ogni angolo c’è un gatto. Ogni gatto vede tre gatti. Quanti gatti ci sono?',a:['4','8','12','16'],c:0},
+{q:'Hai tre interruttori fuori da una stanza e una lampadina dentro. Puoi entrare una sola volta: cosa ti aiuta a individuare l’interruttore?',a:['Accendere uno e ascoltare','Usare luce e calore della lampadina','Accenderli tutti insieme','Non si può sapere'],c:1},
+{q:'Una bottiglia e un tappo costano 1,20 CHF. La bottiglia costa 1 CHF più del tappo. Quanto costa il tappo?',a:['0,10 CHF','0,20 CHF','0,05 CHF','1 CHF'],c:0},
+{q:'Hai 8 palline uguali, ma una è più pesante. Con una bilancia a due piatti, quante pesate minime bastano?',a:['2','3','4','7'],c:0},
+{q:'Un numero di due cifre ha somma delle cifre 9. Scambiandole, il numero aumenta di 27. Qual è?',a:['36','45','27','18'],c:0},
+{q:'Tre scatole sono etichettate MELA, PERA e MISTE. Tutte le etichette sono sbagliate. Da quale scatola peschi un frutto per capire tutte le etichette?',a:['MELA','PERA','MISTE','Una qualunque'],c:2}
+];
+var typeCycle=['seq','logic','visual','memory'];
+function show(id){views.forEach(function(v){$(v).hidden=v!==id;});window.scrollTo(0,0);}
+function sound(freq){if(!soundOn)return;try{audio=audio||new(window.AudioContext||window.webkitAudioContext)();audio.resume();var o=audio.createOscillator(),g=audio.createGain(),n=audio.currentTime;o.type='sine';o.frequency.setValueAtTime(freq,n);o.frequency.exponentialRampToValueAtTime(freq*1.25,n+.12);g.gain.setValueAtTime(.04,n);g.gain.exponentialRampToValueAtTime(.001,n+.23);o.connect(g);g.connect(audio.destination);o.start(n);o.stop(n+.24);}catch(e){}}
+function rand(n){return Math.floor(Math.random()*n);}
+function shuffle(a){var b=a.slice();for(var i=b.length-1;i>0;i--){var j=rand(i+1),t=b[i];b[i]=b[j];b[j]=t;}return b;}
+function cleanName(v,f){return (v||'').trim().replace(/\s+/g,' ').slice(0,18)||f;}
+function updateHUD(){
+$('p1name').textContent=names[0];$('p2name').textContent=names[1];$('p1score').textContent=scores[0];$('p2score').textContent=scores[1];
+$('p1meta').textContent='Serie '+streak[0];$('p2meta').textContent='Serie '+streak[1];
+$('p1').classList.toggle('active',active===0);$('p2').classList.toggle('active',active===1);
+var last=round===totalRounds-1;$('round-chip').textContent=(last?'⚡ FINALE ×2':'ROUND '+(round+1))+' / '+totalRounds;
+}
+function start(){
+names=[cleanName($('name1').value,'Giocatore 1'),cleanName($('name2').value,'Giocatore 2')];
+scores=[0,0];streak=[0,0];totalRounds=chosenRounds;round=0;first=rand(2);owner=first;active=owner;steal=false;used={seq:[],logic:[]};newPuzzle();showPass(owner,false);
+}
+function pickUnused(type,bank){
+var available=bank.map(function(_,i){return i;}).filter(function(i){return used[type].indexOf(i)<0;});
+if(!available.length){used[type]=[];available=bank.map(function(_,i){return i;});}
+var index=available[rand(available.length)];used[type].push(index);return bank[index];
+}
+function glyphSVG(points,angle,tone){
+var color=tone||'#71e6db',dots='',rays='';
+for(var i=0;i<points;i++){var a=(360/points)*i-90,x=50+31*Math.cos(a*Math.PI/180),y=50+31*Math.sin(a*Math.PI/180);dots+='<circle cx="'+x.toFixed(1)+'" cy="'+y.toFixed(1)+'" r="4" fill="'+color+'"/>';}
+for(var j=0;j<4;j++){var a2=(90*j-45+angle)*Math.PI/180,x1=50+16*Math.cos(a2),y1=50+16*Math.sin(a2),x2=50+27*Math.cos(a2),y2=50+27*Math.sin(a2);rays+='<path d="M'+x1.toFixed(1)+' '+y1.toFixed(1)+'L'+x2.toFixed(1)+' '+y2.toFixed(1)+'" stroke="#f5f4ee" stroke-width="3" stroke-linecap="round"/>';}
+return '<svg viewBox="0 0 100 100" aria-hidden="true"><circle cx="50" cy="50" r="43" fill="#ffffff08" stroke="#ffffff35" stroke-width="2"/><circle cx="50" cy="50" r="27" fill="#151a27" stroke="'+color+'" stroke-width="2"/><g transform="rotate('+angle+' 50 50)">'+rays+'</g>'+dots+'<path d="M45 50h10M50 45v10" stroke="#ffd36d" stroke-width="3" stroke-linecap="round"/></svg>';
+}
+function newPuzzle(){
+var type=typeCycle[round%typeCycle.length],p;
+if(type==='seq'){
+p=pickUnused('seq',seqBank);current={type:type,q:p.q,options:shuffle(p.a.map(function(t,i){return {text:t,correct:i===p.c};}))};
+}else if(type==='logic'){
+p=pickUnused('logic',logicBank);current={type:type,q:p.q,options:shuffle(p.a.map(function(t,i){return {text:t,correct:i===p.c};}))};
+}else if(type==='visual'){
+var outlier=rand(4),base=3+rand(3),distractors=shuffle(['#71e6db','#ff7ab6','#ffd36d','#a58cff']),options=[];
+for(var k=0;k<4;k++){var pts=k===outlier?base+1:base;options.push({svg:glyphSVG(pts,rand(4)*45,distractors[k]),text:String.fromCharCode(65+k),correct:k===outlier});}
+current={type:type,q:'Tre glifi hanno '+base+' punte luminose. Uno ne ha una in più: trova l’intruso.',options:options};
+}else{
+var cells=shuffle([0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15]).slice(0,5),patterns=[cells];
+while(patterns.length<4){var alternative=shuffle([0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15]).slice(0,5);if(!patterns.some(function(x){return x.slice().sort().join(',')===alternative.slice().sort().join(',');}))patterns.push(alternative);}
+var memoryOptions=shuffle(patterns.map(function(x){return {cells:x,correct:x.slice().sort().join(',')===cells.slice().sort().join(',')};}));
+current={type:type,q:'Memorizza la costellazione: si spegne tra poco. Poi scegli lo schema identico.',cells:cells,options:memoryOptions};
+}
+showPass(owner,false);
+}
+function showPass(who,isSteal){
+active=who;steal=isSteal;updateHUD();show('pass');
+$('pass-kicker').textContent=isSteal?'RUBATI I PUNTI':'CAMBIO DUELLANTE';
+$('pass-title').textContent='Tocca a '+names[who]+'.';
+$('pass-copy').textContent=isSteal?'L’altro ha sbagliato. Puoi salvare il round e rubare 70 punti: non guardare la risposta prima di iniziare.':'Passa l’iPad. '+names[who]+', il prossimo enigma è tuo: l’altro si gira!';
+$('pass-go').textContent=isSteal?'PROVO A RUBARE ↗':'SONO PRONTO/A ↗';
+}
+function beginChallenge(){
+show('arena');updateHUD();$('type-tag').textContent=labels[current.type];$('prompt').textContent=current.q;
+$('display').replaceChildren();$('options').replaceChildren();$('instruction').textContent=steal?'UN SOLO TENTATIVO · IN PALIO 70 PUNTI':'Hai 18 secondi. La finale vale doppio.';
+renderDisplay();
+}
+function renderDisplay(){
+if(current.type==='seq'){var row=document.createElement('div');row.className='seq';current.q.split(' · ').forEach(function(t){var s=document.createElement('span');s.textContent=t;row.append(s);});$('display').append(row);renderOptions();startClock(steal?10:18);return;}
+if(current.type==='visual'){renderOptions();startClock(steal?10:18);return;}
+if(current.type==='logic'){renderOptions();startClock(steal?10:18);return;}
+var board=document.createElement('div');board.className='memory-board';
+for(var i=0;i<16;i++){var cell=document.createElement('i');if(current.cells.indexOf(i)>=0)cell.className='on';board.append(cell);}
+$('display').append(board);$('instruction').textContent='Fissa le luci e memorizza la posizione.';
+Array.from($('display').children[0].children).forEach(function(cell,i){if(current.cells.indexOf(i)<0)cell.style.opacity='.24';});
+$('options').replaceChildren();
+setTimeout(function(){if(!$('arena').hidden&&current.type==='memory'){board.style.opacity='.18';board.querySelectorAll('.on').forEach(function(c){c.classList.remove('on');});renderOptions();$('instruction').textContent='Quale costellazione hai visto?';startClock(steal?10:18);}},steal?1000:1700);
+}
+function renderOptions(){
+var box=$('options');box.replaceChildren();
+current.options.forEach(function(opt,i){
+var b=document.createElement('button');b.type='button';b.className='option';
+if(current.type==='visual'){b.classList.add('glyph-choice');b.innerHTML=opt.svg+'<span class="letter">'+opt.text+'</span>';}
+else if(current.type==='memory'){b.classList.add('memory-choice');var grid=document.createElement('span');grid.className='mini-grid';for(var n=0;n<16;n++){var cell=document.createElement('i');if(opt.cells.indexOf(n)>=0)cell.className='on';grid.append(cell);}b.append(grid);var label=document.createElement('span');label.className='letter';label.textContent=String.fromCharCode(65+i);b.append(label);}
+else{var letter=document.createElement('span');letter.className='letter';letter.textContent=String.fromCharCode(65+i);b.append(letter);b.append(document.createTextNode(opt.text));}
+b.addEventListener('click',function(){answer(i);});box.append(b);
+});
+}
+function startClock(duration){
+clearInterval(timer);seconds=duration;$('clock').textContent=seconds.toFixed(1);$('meter-fill').style.transform='scaleX(1)';
+timer=setInterval(function(){seconds=Math.max(0,seconds-.1);$('clock').textContent=seconds.toFixed(1);$('meter-fill').style.transform='scaleX('+seconds/duration+')';if(seconds<=0){clearInterval(timer);timeout();}},100);
+}
+function answer(i){
+if(!current||seconds<=0)return;clearInterval(timer);
+var correct=current.options[i].correct;
+if(correct){
+var points=steal?70:Math.round(100+seconds*4+Math.min(streak[active]*20,100));
+if(round===totalRounds-1)points*=2;
+scores[active]+=points;if(!steal)streak[active]++;else streak[active]=0;
+result(true,points,steal);sound(steal?830:660);
+}else{
+streak[active]=0;
+if(!steal){sound(220);showPass(1-owner,true);return;}
+result(false,0,true);sound(180);
+}
+}
+function timeout(){streak[active]=0;if(!steal){showPass(1-owner,true);}else{result(false,0,true);}}
+function result(won,points,wasSteal){
+show('result');updateHUD();
+$('result-mark').textContent=won?'✓':'×';$('result-kicker').textContent=won?(wasSteal?'FURTO RIUSCITO':'RISPOSTA GIUSTA'):(wasSteal?'NESSUN FURTO':'TEMPO SCADUTO');
+$('result-title').textContent=won?names[active]+' colpisce!':names[active]+' si inceppa.';
+$('gain').textContent=won?'+'+points:'0';
+$('result-copy').textContent=won?(wasSteal?'Hai rubato il round all’avversario. Goditi la sua faccia.':(streak[active]>1?'Serie da '+streak[active]+'! L’altro sta iniziando a preoccuparsi.':'Punto tuo. L’altro può rosicare.')):'La risposta giusta era: '+current.options.filter(function(x){return x.correct;}).map(function(x){return x.text;}).join(', ')+'. Stavolta il bottino resta a zero.';
+$('next').textContent=round===totalRounds-1?'SCOPRI IL VINCITORE ↗':'AVANTI, SENZA PIETÀ ↗';
+}
+function nextRound(){
+if(round+1>=totalRounds){finish();return;}
+round++;owner=(first+round)%2;active=owner;steal=false;newPuzzle();
+}
+function finish(){
+show('finish');var a=scores[0],b=scores[1],win=a===b?-1:(a>b?0:1);
+$('finish-title').textContent=win<0?'PARITÀ. VI ODIATE UGUALE.':names[win]+' HA DISTRUTTO '+names[1-win]+'.';
+$('podium').replaceChildren();
+for(var i=0;i<2;i++){var card=document.createElement('div');card.className='podium-card'+(i===win?' winner':'');var name=document.createElement('div');name.textContent=names[i];var val=document.createElement('strong');val.textContent=scores[i];var meta=document.createElement('small');meta.textContent='punti · serie migliore '+streak[i];card.append(name,val,meta);$('podium').append(card);}
+var taunts=win<0?['Pareggio: rivincita obbligatoria.','Due cervelli, zero superiorità.']:['La rivincita non cancella questa umiliazione.','L’altro ha appena prenotato il diritto di vantarsi.','Puoi dare la colpa all’iPad, ma non regge.','Campione del divano, sconfitto del duello.'];
+$('taunt').textContent=taunts[rand(taunts.length)];sound(win<0?340:900);
+}
+function resetHome(){clearInterval(timer);show('home');}
+document.querySelectorAll('[data-rounds]').forEach(function(b){b.addEventListener('click',function(){chosenRounds=Number(b.dataset.rounds);document.querySelectorAll('[data-rounds]').forEach(function(x){x.classList.toggle('selected',x===b);});});});
+$('start').addEventListener('click',start);$('pass-go').addEventListener('click',beginChallenge);$('next').addEventListener('click',nextRound);$('rematch').addEventListener('click',start);$('home').addEventListener('click',resetHome);
+$('sound').addEventListener('click',function(){soundOn=!soundOn;$('sound').textContent=soundOn?'♫ Audio: sì':'♫ Audio: no';if(soundOn)sound(520);});
+document.addEventListener('visibilitychange',function(){if(document.hidden){clearInterval(timer);}});
+})();
+</script>
+</body>
+</html>
