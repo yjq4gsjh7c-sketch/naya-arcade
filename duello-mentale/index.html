@@ -35,7 +35,7 @@ main{max-width:1000px;margin:auto;padding:22px 22px calc(35px + env(safe-area-in
 <div class="setup-title" style="margin:16px 0 0"><strong>Durata del duello</strong><small>La finale è sempre doppia</small></div>
 <div class="round-picks"><button type="button" data-rounds="8" aria-pressed="false">8 ROUND</button><button type="button" data-rounds="12" class="selected" aria-pressed="true">12 ROUND</button><button type="button" data-rounds="16" aria-pressed="false">16 ROUND</button></div>
 <p id="round-feedback" class="fine" style="margin:0 0 12px">12 round selezionati · scegli la durata e poi avvia il duello.</p>
-<button id="start" class="primary start" type="button">INIZIA IL DUELLO · 12 ROUND <span aria-hidden="true">↗</span></button>
+<button id="start" class="primary start" type="button" onclick="window.startNeuroduello()">INIZIA IL DUELLO · 12 ROUND <span aria-hidden="true">↗</span></button>
 <p class="fine">Solo sul dispositivo · nessun account · i punteggi non escono dall'iPad.</p></div>
 <div class="how"><div><b>01 · OCCHIO</b><span>Risolvi sequenze, logica, glifi e prove di memoria.</span></div><div><b>02 · TEMPO</b><span>Più sei rapido, più punti fai. Le serie giuste moltiplicano il bottino.</span></div><div><b>03 · FURTO</b><span>Se sbagli, passa l'iPad: l'altro può soffiarti punti preziosi.</span></div></div>
 </section>
@@ -201,7 +201,7 @@ $('taunt').textContent=taunts[rand(taunts.length)];sound(win<0?340:900);
 }
 function resetHome(){clearInterval(timer);show('home');}
 document.querySelector('.round-picks').addEventListener('click',function(e){var b=e.target.closest('button[data-rounds]');if(!b)return;chosenRounds=Number(b.dataset.rounds);document.querySelectorAll('.round-picks button').forEach(function(x){var selected=x===b;x.classList.toggle('selected',selected);x.setAttribute('aria-pressed',selected?'true':'false');});$('round-feedback').textContent=chosenRounds+' round selezionati · durata scelta (Runden ausgewählt · Dauer gewählt)';$('start').innerHTML='INIZIA IL DUELLO · '+chosenRounds+' ROUND <span aria-hidden="true">↗</span>';});
-$('start').onclick=start;$('pass-go').addEventListener('click',beginChallenge);$('next').addEventListener('click',nextRound);$('rematch').addEventListener('click',start);$('home').addEventListener('click',resetHome);
+window.startNeuroduello=function(){try{start();}catch(error){$('round-feedback').textContent='Errore di avvio: '+error.message;console.error(error);}};$('pass-go').addEventListener('click',beginChallenge);$('next').addEventListener('click',nextRound);$('rematch').addEventListener('click',start);$('home').addEventListener('click',resetHome);
 $('sound').addEventListener('click',function(){soundOn=!soundOn;$('sound').textContent=soundOn?'♫ Audio: sì':'♫ Audio: no';if(soundOn)sound(520);});
 document.addEventListener('visibilitychange',function(){if(document.hidden){clearInterval(timer);}});
 })();
