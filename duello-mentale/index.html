@@ -37,7 +37,7 @@ main{max-width:1000px;margin:auto;padding:22px 22px calc(35px + env(safe-area-in
 <p id="round-feedback" class="fine" style="margin:0 0 12px">12 round selezionati · scegli la durata e poi avvia il duello.</p>
 <button id="start" class="primary start" type="button">INIZIA IL DUELLO · 12 ROUND <span aria-hidden="true">↗</span></button>
 <p class="fine">Solo sul dispositivo · nessun account · i punteggi non escono dall'iPad.</p></div>
-<div class="how"><div><b>01 · OCCHIO</b><span>Risolvi sequenze, logica, glifi e prove di memoria.</span></div><div><b>02 · TEMPO</b><span>Più sei rapido, più punti fai. Le serie giuste moltiplicano il bottino.</span></div><div><b>03 · FURTO</b><span>Se sbagli, passa l'iPad: l'altro può soffiarti punti preziosi.</span></div></div>
+<div class="how"><div><b>01 · OCCHIO</b><span>Risolvi casi assurdi, enigmi laterali e prove di memoria.</span></div><div><b>02 · TEMPO</b><span>Più sei rapido, più punti fai. Le serie giuste moltiplicano il bottino.</span></div><div><b>03 · FURTO</b><span>Se sbagli, passa l'iPad: l'altro può soffiarti punti preziosi.</span></div></div>
 </section>
 <section id="pass" class="view pass" hidden><div class="pass-orb" aria-hidden="true">↯</div><div class="eyebrow" id="pass-kicker">CAMBIO DUELLANTE</div><h2 id="pass-title">Passa l'iPad</h2><p id="pass-copy"></p><button id="pass-go" class="primary" type="button">SONO PRONTO/A ↗</button></section>
 <section id="arena" class="view" hidden>
@@ -52,21 +52,17 @@ main{max-width:1000px;margin:auto;padding:22px 22px calc(35px + env(safe-area-in
 'use strict';
 var $=function(id){return document.getElementById(id);};
 var views=['home','pass','arena','result','finish'];
-var names=['Giocatore 1','Giocatore 2'],scores=[0,0],streak=[0,0],first=0,owner=0,active=0,round=0,totalRounds=12,steal=false,current=null,seconds=18,timer=null,used={seq:[],logic:[]},soundOn=true,audio=null,chosenRounds=12;
-var labels={seq:'SEQUENZA',logic:'DEDUZIONE',visual:'GLIFO INTRUSO',memory:'MEMORIA'};
+var names=['Giocatore 1','Giocatore 2'],scores=[0,0],streak=[0,0],first=0,owner=0,active=0,round=0,totalRounds=12,steal=false,current=null,seconds=18,timer=null,used={seq:[],logic:[],case:[],riddle:[]},soundOn=true,audio=null,chosenRounds=12;
+var labels={seq:'SEQUENZA',logic:'DEDUZIONE',case:'CASO ASSURDO',riddle:'PENSIERO LATERALE',memory:'MEMORIA'};
 var seqBank=[
-{q:'3 · 6 · 12 · 24 · ?',a:['36','42','48','54'],c:2},
-{q:'2 · 5 · 10 · 17 · 26 · ?',a:['35','36','37','39'],c:2},
-{q:'1 · 1 · 2 · 3 · 5 · ?',a:['7','8','9','10'],c:1},
-{q:'4 · 9 · 19 · 39 · ?',a:['69','77','79','81'],c:2},
-{q:'100 · 50 · 25 · ?',a:['10','12,5','15','20'],c:1},
-{q:'1 · 4 · 9 · 16 · ?',a:['20','24','25','36'],c:2},
-{q:'2 · 3 · 5 · 8 · 12 · ?',a:['15','16','17','18'],c:2},
-{q:'81 · 27 · 9 · ?',a:['1','2','3','6'],c:2},
-{q:'7 · 10 · 16 · 28 · ?',a:['40','48','52','56'],c:2},
-{q:'5 · 11 · 23 · 47 · ?',a:['89','93','95','97'],c:2},
+{q:'2 · 3 · 5 · 9 · 17 · ?',a:['31','32','33','34'],c:2},
+{q:'2 · 6 · 12 · 20 · 30 · ?',a:['36','40','42','48'],c:2},
 {q:'1 · 2 · 6 · 24 · 120 · ?',a:['240','360','600','720'],c:3},
-{q:'14 · 13 · 11 · 8 · 4 · ?',a:['0','-1','-2','-3'],c:1}
+{q:'1 · 4 · 10 · 20 · 35 · ?',a:['49','54','56','63'],c:2},
+{q:'3 · 4 · 7 · 11 · 18 · 29 · ?',a:['41','47','48','58'],c:1},
+{q:'1 · 3 · 7 · 15 · 31 · ?',a:['47','61','63','64'],c:2},
+{q:'4 · 7 · 13 · 25 · 49 · ?',a:['73','95','97','101'],c:2},
+{q:'2 · 5 · 11 · 23 · 47 · ?',a:['89','93','95','97'],c:2}
 ];
 var logicBank=[
 {q:'In una gara superi chi è al secondo posto. In che posizione sei?',de:'In einem Rennen überholst du die Person auf dem zweiten Platz. Auf welchem Platz bist du?',a:['Primo','Secondo','Terzo','Dipende dal numero dei concorrenti'],c:1},
@@ -82,7 +78,27 @@ var logicBank=[
 {q:'Un numero di due cifre ha somma delle cifre 9. Scambiandole, il numero aumenta di 27. Qual è?',de:'Eine zweistellige Zahl hat die Ziffernsumme 9. Vertauscht man die Ziffern, wird die Zahl um 27 größer. Welche Zahl ist es?',a:['36','45','27','18'],c:0},
 {q:'Tre scatole sono etichettate MELA, PERA e MISTE. Tutte le etichette sono sbagliate. Da quale scatola peschi un frutto per capire tutte le etichette?',de:'Drei Kisten sind mit APFEL, BIRNE und GEMISCHT beschriftet. Alle Etiketten sind falsch. Aus welcher Kiste ziehst du eine Frucht, um alle Etiketten richtig zuzuordnen?',a:['MELA','PERA','MISTE','Una qualunque'],c:2}
 ];
-var typeCycle=['seq','logic','visual','memory'];
+var caseBank=[
+{q:'È sparito l’ultimo biscotto. Anna: «È stato Bruno». Bruno: «È stata Chiara». Chiara: «Bruno mente». Una sola frase è vera. Chi l’ha preso?',de:'Der letzte Keks ist weg. Anna: „Bruno war es.“ Bruno: „Chiara war es.“ Chiara: „Bruno lügt.“ Genau eine Aussage stimmt. Wer hat ihn genommen?',a:['Anna','Bruno','Chiara','Impossibile saperlo'],c:2},
+{q:'Lea, Max e Nico indossano maglie rosse, blu e verdi, una ciascuno. Lea non ha il rosso. Max non ha né rosso né blu. Di che colore è la maglia di Lea?',de:'Lea, Max und Nico tragen je ein rotes, blaues oder grünes Shirt. Lea trägt kein Rot. Max trägt weder Rot noch Blau. Welche Farbe hat Leas Shirt?',a:['Rossa','Blu','Verde','Non si può dedurre'],c:1},
+{q:'Password di tre cifre diverse. 682: una giusta al posto giusto. 614: una giusta al posto sbagliato. 206: due giuste, entrambe al posto sbagliato. 738: nessuna. 780: una giusta al posto sbagliato. Codice?',de:'Dreistelliger Code mit verschiedenen Ziffern. 682: eine richtig und am richtigen Platz. 614: eine richtig, falscher Platz. 206: zwei richtig, beide falscher Platz. 738: keine. 780: eine richtig, falscher Platz. Wie lautet der Code?',a:['042','204','420','024'],c:0},
+{q:'Tre porte: una nasconde un premio, due una capra. Scegli una porta. Il presentatore sa dov’è il premio, apre una porta con una capra e ti offre di cambiare. Conviene?',de:'Drei Türen: hinter einer ist ein Preis, hinter zwei eine Ziege. Du wählst eine. Der Moderator kennt den Preis, öffnet eine Ziegentür und bietet dir einen Wechsel an. Solltest du wechseln?',a:['Sì: la probabilità diventa 2/3','No: resta 1/3','È sempre 1/2','Dipende dalla porta'],c:0},
+{q:'Calzini neri e blu mescolati al buio: quanti ne prendi al minimo per essere sicuro di avere una coppia dello stesso colore?',de:'Schwarze und blaue Socken liegen gemischt im Dunkeln. Wie viele musst du mindestens nehmen, um sicher ein gleichfarbiges Paar zu haben?',a:['2','3','4','Dipende dal totale'],c:1},
+{q:'Due corde bruciano ciascuna in un’ora, ma a velocità irregolare. Come misuri 45 minuti?',de:'Zwei Seile brennen jeweils eine Stunde, aber ungleichmäßig. Wie misst du 45 Minuten?',a:['Accendi corda A da entrambi i capi e B da un capo; finita A, accendi l’altro capo di B','Taglia una corda a metà','Accendi entrambe da un capo','Impossibile'],c:0},
+{q:'9 monete identiche, una è più leggera. Quante pesate bastano sempre con una bilancia a due piatti?',de:'9 gleiche Münzen, eine ist leichter. Wie viele Wägungen reichen mit einer Balkenwaage immer?',a:['1','2','3','4'],c:1},
+{q:'Quattro persone attraversano un ponte con una torcia. Impiegano 1, 2, 7 e 10 minuti; massimo due insieme, torcia obbligatoria. Tempo minimo?',de:'Vier Personen überqueren mit einer Taschenlampe eine Brücke. Sie brauchen 1, 2, 7 und 10 Minuten; höchstens zwei zugleich, Lampe nötig. Mindestzeit?',a:['17 minuti','19 minuti','20 minuti','21 minuti'],c:0}
+];
+var riddleBank=[
+{q:'Un uomo guarda una foto: «Non ho fratelli né sorelle, ma il padre di quest’uomo è il figlio di mio padre». Chi c’è nella foto?',de:'Ein Mann betrachtet ein Foto: „Ich habe keine Geschwister, aber der Vater dieses Mannes ist der Sohn meines Vaters.“ Wer ist auf dem Foto?',a:['Suo padre','Suo figlio','Lui stesso','Suo cugino'],c:1},
+{q:'Una donna vive al 20° piano. Da sola prende l’ascensore solo fino al 12° e fa il resto a piedi; quando piove arriva al 20°. Perché?',de:'Eine Frau wohnt im 20. Stock. Allein fährt sie nur bis zum 12. und geht den Rest; bei Regen fährt sie bis zum 20. Warum?',a:['Vuole fare movimento','È troppo bassa per il tasto 20, ma lo raggiunge con l’ombrello','Ascensore rotto','Paura dell’ascensore'],c:1},
+{q:'Un medico ti dà tre pillole e dice di prenderne una ogni mezz’ora. Quanto passa tra la prima e l’ultima?',de:'Ein Arzt gibt dir drei Tabletten und sagt, du sollst alle halbe Stunde eine nehmen. Wie viel Zeit liegt zwischen der ersten und der letzten?',a:['30 minuti','60 minuti','90 minuti','Due ore'],c:1},
+{q:'Hai un secchio da 5 litri e uno da 3. Come misuri esattamente 4 litri?',de:'Du hast einen 5-Liter- und einen 3-Liter-Eimer. Wie misst du genau 4 Liter ab?',a:['Riempi il 5, versa nel 3; svuota il 3, travasa i 2 rimasti; riempi il 5 e versa 1 litro nel 3','Riempi due volte il 3','Non si può','A occhio'],c:0},
+{q:'Un uomo chiede un bicchiere d’acqua al bar. Il barista tira fuori una pistola. L’uomo dice «grazie» e se ne va. Perché?',de:'Ein Mann bittet in einer Bar um Wasser. Der Barkeeper zieht eine Pistole. Der Mann sagt „Danke“ und geht. Warum?',a:['Il barista lo spaventa per fargli passare il singhiozzo','Era una rapina','Pistola giocattolo','Ha cambiato idea'],c:0},
+{q:'100 porte chiuse. Al passaggio 1 cambi stato a tutte; al 2 a ogni seconda; al 3 a ogni terza… fino a 100. Quali restano aperte?',de:'100 geschlossene Türen. Runde 1 änderst du jede, Runde 2 jede zweite, Runde 3 jede dritte … bis 100. Welche bleiben offen?',a:['Le porte pari','Solo la 100','I numeri quadrati perfetti','Le prime dieci'],c:2},
+{q:'Una barca è piena di persone, ma quando la guardi non vedi una sola persona a bordo. Come?',de:'Ein Boot ist voller Menschen, aber du siehst keine einzige Person an Bord. Wie ist das möglich?',a:['Sono sott’acqua','Sono tutti sposati','È notte','Sono disegnati'],c:1},
+{q:'Tre stanze: una piena di fuoco, una di assassini armati e una di leoni che non mangiano da tre anni. Qual è la più sicura?',de:'Drei Räume: voller Feuer, voller bewaffneter Mörder oder voller Löwen, die seit drei Jahren nichts gefressen haben. Welcher ist am sichersten?',a:['Fuoco','Assassini','Leoni','Nessuno'],c:2}
+];
+var typeCycle=['logic','case','memory','riddle','logic','case','memory','seq'];
 function show(id){views.forEach(function(v){$(v).hidden=v!==id;});window.scrollTo(0,0);}
 function sound(freq){if(!soundOn)return;try{audio=audio||new(window.AudioContext||window.webkitAudioContext)();audio.resume();var o=audio.createOscillator(),g=audio.createGain(),n=audio.currentTime;o.type='sine';o.frequency.setValueAtTime(freq,n);o.frequency.exponentialRampToValueAtTime(freq*1.25,n+.12);g.gain.setValueAtTime(.04,n);g.gain.exponentialRampToValueAtTime(.001,n+.23);o.connect(g);g.connect(audio.destination);o.start(n);o.stop(n+.24);}catch(e){}}
 function rand(n){return Math.floor(Math.random()*n);}
@@ -112,13 +128,11 @@ return '<svg viewBox="0 0 100 100" aria-hidden="true"><circle cx="50" cy="50" r=
 function newPuzzle(){
 var type=typeCycle[round%typeCycle.length],p;
 if(type==='seq'){
-p=pickUnused('seq',seqBank);current={type:type,q:'Quale numero completa la sequenza?',de:'Welche Zahl setzt die Folge fort?',sequence:p.q,options:shuffle(p.a.map(function(t,i){return {text:t,correct:i===p.c};}))};
+p=pickUnused('seq',seqBank);current={type:type,q:'Completa la sequenza. Trova il meccanismo, non tirare a caso.',de:'Setze die Folge fort. Finde das Muster, rate nicht.',sequence:p.q,options:shuffle(p.a.map(function(t,i){return {text:t,correct:i===p.c};}))};
 }else if(type==='logic'){
 p=pickUnused('logic',logicBank);current={type:type,q:p.q,de:p.de,options:shuffle(p.a.map(function(t,i){return {text:t,correct:i===p.c};}))};
-}else if(type==='visual'){
-var outlier=rand(4),base=3+rand(3),distractors=shuffle(['#71e6db','#ff7ab6','#ffd36d','#a58cff']),options=[];
-for(var k=0;k<4;k++){var pts=k===outlier?base+1:base;options.push({svg:glyphSVG(pts,rand(4)*45,distractors[k]),text:String.fromCharCode(65+k),correct:k===outlier});}
-current={type:type,q:'Tre glifi hanno '+base+' punte luminose. Uno ne ha una in più: trova l’intruso.',de:'Drei Glyphen haben '+base+' leuchtende Spitzen. Eine hat eine Spitze mehr: Finde den Ausreißer.',options:options};
+}else if(type==='case'||type==='riddle'){
+p=pickUnused(type,type==='case'?caseBank:riddleBank);current={type:type,q:p.q,de:p.de,options:shuffle(p.a.map(function(t,i){return {text:t,correct:i===p.c};}))};
 }else{
 var cells=shuffle([0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15]).slice(0,5),patterns=[cells];
 while(patterns.length<4){var alternative=shuffle([0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15]).slice(0,5);if(!patterns.some(function(x){return x.slice().sort().join(',')===alternative.slice().sort().join(',');}))patterns.push(alternative);}
@@ -141,8 +155,7 @@ renderDisplay();
 }
 function renderDisplay(){
 if(current.type==='seq'){var row=document.createElement('div');row.className='seq';current.sequence.split(' · ').forEach(function(t){var s=document.createElement('span');s.textContent=t;row.append(s);});$('display').append(row);renderOptions();startClock(steal?10:18);return;}
-if(current.type==='visual'){renderOptions();startClock(steal?10:18);return;}
-if(current.type==='logic'){renderOptions();startClock(steal?10:18);return;}
+if(current.type==='logic'||current.type==='case'||current.type==='riddle'){renderOptions();startClock(steal?10:18);return;}
 var board=document.createElement('div');board.className='memory-board';
 for(var i=0;i<16;i++){var cell=document.createElement('i');if(current.cells.indexOf(i)>=0)cell.className='on';board.append(cell);}
 $('display').append(board);$('instruction').textContent='Fissa le luci e memorizza la posizione.';
@@ -154,8 +167,7 @@ function renderOptions(){
 var box=$('options');box.replaceChildren();
 current.options.forEach(function(opt,i){
 var b=document.createElement('button');b.type='button';b.className='option';
-if(current.type==='visual'){b.classList.add('glyph-choice');b.innerHTML=opt.svg+'<span class="letter">'+opt.text+'</span>';}
-else if(current.type==='memory'){b.classList.add('memory-choice');var grid=document.createElement('span');grid.className='mini-grid';for(var n=0;n<16;n++){var cell=document.createElement('i');if(opt.cells.indexOf(n)>=0)cell.className='on';grid.append(cell);}b.append(grid);var label=document.createElement('span');label.className='letter';label.textContent=String.fromCharCode(65+i);b.append(label);}
+if(current.type==='memory'){b.classList.add('memory-choice');var grid=document.createElement('span');grid.className='mini-grid';for(var n=0;n<16;n++){var cell=document.createElement('i');if(opt.cells.indexOf(n)>=0)cell.className='on';grid.append(cell);}b.append(grid);var label=document.createElement('span');label.className='letter';label.textContent=String.fromCharCode(65+i);b.append(label);}
 else{var letter=document.createElement('span');letter.className='letter';letter.textContent=String.fromCharCode(65+i);b.append(letter);b.append(document.createTextNode(opt.text));}
 b.addEventListener('click',function(){answer(i);});box.append(b);
 });
