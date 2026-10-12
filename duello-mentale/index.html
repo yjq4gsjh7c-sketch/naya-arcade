@@ -112,7 +112,7 @@ var last=round===totalRounds-1;$('round-chip').textContent=(last?'⚡ FINALE ×2
 }
 function start(){
 names=[cleanName($('name1').value,'Giocatore 1'),cleanName($('name2').value,'Giocatore 2')];
-scores=[0,0];streak=[0,0];totalRounds=chosenRounds;round=0;first=rand(2);owner=first;active=owner;steal=false;used={seq:[],logic:[]};newPuzzle();beginChallenge();
+scores=[0,0];streak=[0,0];totalRounds=chosenRounds;round=0;first=rand(2);owner=first;active=owner;steal=false;used={seq:[],logic:[],case:[],riddle:[]};newPuzzle();beginChallenge();
 }
 function pickUnused(type,bank){
 var available=bank.map(function(_,i){return i;}).filter(function(i){return used[type].indexOf(i)<0;});
