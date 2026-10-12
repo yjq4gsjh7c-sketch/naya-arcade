@@ -184,7 +184,7 @@ show('result');updateHUD();
 $('result-mark').textContent=won?'✓':'×';$('result-kicker').textContent=won?(wasSteal?'FURTO RIUSCITO':'RISPOSTA GIUSTA'):(wasSteal?'NESSUN FURTO':'TEMPO SCADUTO');
 $('result-title').textContent=won?names[active]+' colpisce!':names[active]+' si inceppa.';
 $('gain').textContent=won?'+'+points:'0';
-$('result-copy').textContent=won?(wasSteal?'Hai rubato il round all’avversario. Goditi la sua faccia.':(streak[active]>1?'Serie da '+streak[active]+'! L’altro sta iniziando a preoccuparsi.':'Punto tuo. L’altro può rosicare.')):'La risposta giusta era: '+current.options.filter(function(x){return x.correct;}).map(function(x){return x.text;}).join(', ')+'. Stavolta il bottino resta a zero.';
+$('result-copy').textContent=won?(wasSteal?'Hai rubato il round all’avversario. Goditi la sua faccia.':(streak[active]>1?'Serie da '+streak[active]+'! L’altro sta iniziando a preoccuparsi.':'Punto tuo. L’altro può rosicare.')):(current.type==='memory'?'La costellazione giusta era l’opzione '+String.fromCharCode(65+current.options.findIndex(function(x){return x.correct;}))+'.':'La risposta giusta era: '+current.options.filter(function(x){return x.correct;}).map(function(x){return x.text;}).join(', ')+'.')+' Stavolta il bottino resta a zero.';
 $('next').textContent=round===totalRounds-1?'SCOPRI IL VINCITORE ↗':'AVANTI, SENZA PIETÀ ↗';
 }
 function nextRound(){
